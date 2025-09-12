@@ -61,6 +61,37 @@ function renderByAge(array, ageThreshold, characterId) {
 renderByAge(users, 40, "age-filter-list");
 
 // 5. Add error handling to your functions that will log an error message using console.error() if any object doesn't have a "name" property. Display any error messages in the div with id "error-messages"
+function errorHandling(array, characterId, errorId) {
+  const ul = document.getElementById(characterId);
+  const errorDiv = document.getElementById(errorId);
 
+  array.forEach(user => {
+    try {
+      if (!user?.name) {
+        throw new Error(`Missing "name" for user with the id ${user.id}`);
+      }
+
+      const li = document.createElement("li");
+      li.textContent = user.name;
+      ul.appendChild(li);
+    } catch (error) {
+      console.error(error.message);
+
+      const errorMessage = document.createElement("div");
+      errorMessage.className = "error-message";
+      errorMessage.textContent = error.message;
+      errorDiv.appendChild(errorMessage);
+    }
+  });
+}
+
+errorHandling(users, "error-handling-list", "error-messages");
 
 // 6. Test your error handling by creating a second array that's intentionally broken (missing name properties) and passing it to your functions. Verify that your error handling works correctly and displays errors in the div with id "broken-array-errors"
+const test = [
+  { id: 1, name: "Test", age: 20 },
+  { id: 2, name: "", age: 28 },
+  { id: 3, age: 18 }
+];
+
+errorHandling(test, "broken-array-list", "broken-array-errors");
